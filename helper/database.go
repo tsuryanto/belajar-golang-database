@@ -1,12 +1,16 @@
-package golang_database
+package helper
 
 import (
 	"database/sql"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func GetConnection() *sql.DB {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/belajar_golang_database")
+
+	// parseTime=true ditulis agar tipedata DATE / TIME di mysql otomatis terconvert ke time golang
+	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/belajar_golang_database?parseTime=true")
 	if err != nil {
 		panic(err)
 	}

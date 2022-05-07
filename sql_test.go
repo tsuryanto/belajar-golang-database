@@ -1,6 +1,7 @@
 package golang_database
 
 import (
+	"belajar-golang-database/helper"
 	"context"
 	"fmt"
 	"strconv"
@@ -9,7 +10,7 @@ import (
 
 func TestExecSqlParameter(t *testing.T) {
 	// Dapatkan koneksi dari database
-	db := GetConnection()
+	db := helper.GetConnection()
 	defer db.Close()
 
 	ctx := context.Background()
@@ -35,7 +36,7 @@ func TestExecSqlParameter(t *testing.T) {
 }
 
 func TestSqlInjectionSafe(t *testing.T) {
-	db := GetConnection()
+	db := helper.GetConnection()
 	defer db.Close()
 
 	ctx := context.Background()
@@ -46,11 +47,11 @@ func TestSqlInjectionSafe(t *testing.T) {
 	query := "SELECT username from user WHERE username = ? AND password = ?"
 
 	rows, err := db.QueryContext(ctx, query, username, password)
-	defer rows.Close()
 
 	if err != nil {
 		panic(err)
 	}
+	defer rows.Close()
 
 	if rows.Next() {
 		var username string
@@ -66,7 +67,7 @@ func TestSqlInjectionSafe(t *testing.T) {
 
 //
 func TestSqlPrepareStatement(t *testing.T) {
-	db := GetConnection()
+	db := helper.GetConnection()
 	defer db.Close()
 
 	ctx := context.Background()
@@ -114,7 +115,7 @@ func TestSqlPrepareStatement(t *testing.T) {
 
 // Input data dengan memungkinkan pembatalan data yang telah diinput
 func TestSqlTransaction(t *testing.T) {
-	db := GetConnection()
+	db := helper.GetConnection()
 	defer db.Close()
 
 	ctx := context.Background()
